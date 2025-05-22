@@ -13,7 +13,7 @@ class WC_Email_Package_Ready extends WC_Email {
      * Constructor
      */
     public function __construct() {
-        $this->id             = 'WC_Email_Package_Ready';
+        $this->id             = 'email_package_ready';
         $this->customer_email = true;
         $this->title          = __('Package ready for shipment', 'woocommerce-package-ready');
         $this->description    = __('This email is sent to customers when their order status is changed to Package ready for shipment', 'woocommerce-package-ready');
