@@ -255,7 +255,7 @@ class WC_Package_Ready {
         
         // Loop through email classes
         foreach ($emails as $email) {
-            if ($email->id === 'wc_email_package_ready') {
+            if ($email->id === 'email_package_ready') {
                 // Send the email
                 $email->trigger($order_id, $order);
                 break;
