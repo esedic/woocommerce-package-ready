@@ -6,11 +6,10 @@
  * Version: 1.1.1
  * Author:      Elvis Sedić
  * Author URI:  https://spletodrom.si
- * License:     GPL2
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woocommerce-package-ready
  * Domain Path: /languages
- * WC requires at least: 3.0.0
- * WC tested up to: 7.5.0
  */
 
 if (!defined('ABSPATH')) {
@@ -71,7 +70,7 @@ class WC_Package_Ready {
         $this->define_constants();
         
         // Check if WooCommerce is active
-        add_action('plugins_loaded', array($this, 'check_dependencies'));
+        add_action('plugins_loaded', array($this, 'on_plugins_loaded'));
     }
 
     /**
@@ -152,13 +151,20 @@ class WC_Package_Ready {
     /**
      * Check plugin dependencies.
      */
-    public function check_dependencies() {
+    public function on_plugins_loaded() {
         // Check if WooCommerce is active
         if (!class_exists('WooCommerce')) {
             add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
             return;
         }
-        
+
+        // Load text domain
+        $this->load_plugin_textdomain();
+
+        // Register email class BEFORE WooCommerce initializes emails
+        add_filter('woocommerce_email_classes', array($this, 'add_package_ready_email_class'));
+
+
         // Initialize hooks
         $this->init_hooks();
     }

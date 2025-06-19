@@ -1,26 +1,54 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
-?>
+/**
+ * Package Ready for shipment email (plain text)
+ *
+ * @package WooCommerce Ready for shipment
+ */
 
-= <?php esc_html_e( 'Your Package Is Ready For Shipment', 'woocommerce-package-ready' ); ?> =
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-<?php 
-printf(
-    esc_html__( 'Your order #%d is ready for shipment!', 'woocommerce-package-ready' ), 
+echo "= " . esc_html($email_heading) . " =\n\n";
+
+echo sprintf(
+    esc_html( pll__( 'Hi %s,' ) ),
+    esc_html( $order->get_billing_first_name() )
+) . "\n\n";
+
+echo esc_html( pll__( 'Your order #%d is ready for shipment!' ) ) . "\n\n";
+
+echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
+
+echo sprintf(
+    esc_html( pll__( 'Order #%s' ) ),
     esc_html( $order->get_order_number() )
-); 
-?>
+) . "\n\n";
 
-== <?php esc_html_e( 'Order Details', 'woocommerce-package-ready' ); ?> ==
+foreach ($order->get_items() as $item_id => $item) {
+    echo wp_kses_post($item->get_name()) . ' × ' . wp_kses_post($item->get_quantity()) . "\n";
+}
 
-<?php foreach ( $order->get_items() as $item ) : ?>
-- <?php echo esc_html( $item->get_name() ); ?> (<?php esc_html_e( 'Quantity:', 'woocommerce-package-ready' ); ?> <?php echo esc_html( $item->get_quantity() ); ?>)
-  <?php esc_html_e( 'Price:', 'woocommerce-package-ready' ); ?> <?php echo wc_price( $order->get_item_total( $item, true ) ); ?>
+echo "\n";
 
-<?php endforeach; ?>
+$totals = $order->get_order_item_totals();
+if ($totals) {
+    foreach ($totals as $total) {
+        echo wp_kses_post($total['label'] . ': ' . $total['value']) . "\n";
+    }
+}
 
-== <?php esc_html_e( 'Total:', 'woocommerce-package-ready' ); ?> == 
-<?php echo wc_price( $order->get_total() ); ?>
+echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
+
+echo esc_html( pll__( 'Thank you for shopping with us!' ) ) . "\n\n";
 
 
-<?php esc_html_e( 'Thank you for shopping with us!', 'woocommerce-package-ready' ); ?>
+/**
+ * Show user-defined additional content - this is set in each email's settings.
+ */
+if ($additional_content) {
+    echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
+    echo "\n\n";
+}
+
+echo apply_filters('woocommerce_email_footer_text', get_option('woocommerce_email_footer_text'));
