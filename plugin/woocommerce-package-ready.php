@@ -113,11 +113,13 @@ class WC_Package_Ready {
         // Send email when order status changes to package-ready
         add_action('woocommerce_order_status_changed', array($this, 'send_package_ready_email_notification'), 10, 3);
 
-        // Add bulk action for orders
+        // Add bulk action for orders (legacy and HPOS screens)
         add_filter('bulk_actions-edit-shop_order', array($this, 'register_bulk_actions'));
-        
-        // Handle the custom bulk action
+        add_filter('bulk_actions-wc-orders', array($this, 'register_bulk_actions'));
+
+        // Handle the custom bulk action (legacy and HPOS screens)
         add_filter('handle_bulk_actions-edit-shop_order', array($this, 'handle_bulk_actions'), 10, 3);
+        add_filter('handle_bulk_actions-wc-orders', array($this, 'handle_bulk_actions'), 10, 3);
         
         // Display admin notice after bulk action
         add_action('admin_notices', array($this, 'bulk_action_admin_notice'));
