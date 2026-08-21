@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WooCommerce Package ready for shipment
- * Plugin URI:  https://spletodrom.si
+ * Plugin URI:  https://github.com/esedic/woocommerce-package-ready
  * Description: Sets a custom WooCommerce order status "Package ready" and sends a custom email when a WooCommerce order status changes to this status
  * Version: 1.1.1
  * Author:      Elvis Sedić
@@ -10,6 +10,11 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woocommerce-package-ready
  * Domain Path: /languages
+ * Requires at least: 5.0
+ * Tested up to: 6.4
+ * Requires PHP: 7.4
+ * Requires Plugins: woocommerce, advanced-custom-fields-pro
+ * WC requires at least: 7.0
  */
 
 if (!defined('ABSPATH')) {
